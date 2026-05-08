@@ -13988,7 +13988,6 @@
 
         let html = `
     <div class="q-meta">
-      <span class="q-badge badge-chapter">Kapitel ${q.chapter}</span>
       <span class="q-badge ${diffClass}">${q.difficulty}</span>
       ${q.is_multi ? '<span class="q-badge badge-multi">Flera svar</span>' : ""}
     </div>
@@ -14241,7 +14240,7 @@
               .join(", ");
             html += `
         <div class="wrong-item">
-          <div class="wi-q"><strong>Kap ${q.chapter}:</strong> ${escapeHtml(q.question).substring(0, 120)}${q.question.length > 120 ? "..." : ""}</div>
+          <div class="wi-q">${escapeHtml(q.question).substring(0, 120)}${q.question.length > 120 ? "..." : ""}</div>
           <div class="wi-a">→ ${escapeHtml(correctTexts)}</div>
         </div>
       `;
