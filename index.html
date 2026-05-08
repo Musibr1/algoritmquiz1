@@ -13963,11 +13963,43 @@
         showQuestion();
       }
 
+      function shuffleOptions(q) {
+        const letters = q.options.map(o => o.letter);
+        const correctLetters = q.correct_answer.split(",");
+        const correctTexts = q.options
+          .filter(o => correctLetters.includes(o.letter))
+          .map(o => o.text);
+
+        // Fisher-Yates shuffle
+        const shuffled = [...q.options];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+
+        // Assign new letters
+        shuffled.forEach((opt, i) => {
+          opt.letter = letters[i];
+        });
+        q.options = shuffled;
+
+        // Update correct_answer based on new positions
+        const newCorrect = q.options
+          .filter(o => correctTexts.includes(o.text))
+          .map(o => o.letter)
+          .sort()
+          .join(",");
+        q.correct_answer = newCorrect;
+      }
+
       function showQuestion() {
         const q = state.questions[state.currentIndex];
         const total = state.questions.length;
         state.answered = false;
         state.multiSelected = new Set();
+
+        // Shuffle options so correct answer isn't always the same letter
+        shuffleOptions(q);
 
         // Update stats
         document.getElementById("q-num").textContent =
