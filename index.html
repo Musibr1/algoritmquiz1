@@ -651,7 +651,7 @@
       <div class="app-header">
         <h1>Algorithms Quiz</h1>
         <p>
-          765 frågor &bull; 10 Ämnen &bull; Pseudokod &bull; Alla
+          865 frågor &bull; 10 Ämnen &bull; Pseudokod &bull; Alla
           svårighetsgrader
         </p>
       </div>
@@ -695,6 +695,21 @@
               onclick="selectDifficulty(this)"
             >
               <span class="emoji">🔴</span> Svår
+            </button>
+          </div>
+        </div>
+
+        <div class="setup-section">
+          <h3>📝 Frågetyp</h3>
+          <div class="diff-btns">
+            <button class="diff-btn selected" data-qtype="all" onclick="selectQuestionType(this)">
+              <span class="emoji">🎯</span> Alla
+            </button>
+            <button class="diff-btn" data-qtype="regular" onclick="selectQuestionType(this)">
+              <span class="emoji">📖</span> Vanliga
+            </button>
+            <button class="diff-btn" data-qtype="pseudo" onclick="selectQuestionType(this)">
+              <span class="emoji">💻</span> Pseudokod
             </button>
           </div>
         </div>
@@ -804,11 +819,16 @@
     <div class="streak hidden" id="streak-indicator"></div>
 
     <script src="questions.js"></script>
+    <script src="new_questions.js"></script>
     <script>
+      // Kombinera vanliga frågor + pseudokodfrågor
+      const COMBINED_QUESTIONS = [...ALL_QUESTIONS, ...PSEUDOCODE_QUESTIONS];
+
       // ─── STATE ───
       let state = {
         selectedChapters: new Set(),
         difficulty: "all",
+        questionType: "all",
         timerSeconds: 30,
         questions: [],
         currentIndex: 0,
@@ -827,7 +847,7 @@
       // ─── SETUP ───
       function init() {
         const chapters = {};
-        ALL_QUESTIONS.forEach((q) => {
+        COMBINED_QUESTIONS.forEach((q) => {
           if (!chapters[q.chapter]) {
             chapters[q.chapter] = { name: q.chapter_name, count: 0 };
           }
@@ -857,6 +877,13 @@
           state.selectedChapters.add(ch);
           btn.classList.add("selected");
         }
+        updateAvailableCount();
+      }
+
+      function selectQuestionType(btn) {
+        state.questionType = btn.dataset.qtype;
+        document.querySelectorAll('[data-qtype]').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
         updateAvailableCount();
       }
 
@@ -906,7 +933,14 @@
       }
 
       function getFilteredQuestions() {
-        let filtered = [...ALL_QUESTIONS];
+        let filtered;
+        if (state.questionType === "regular") {
+          filtered = [...ALL_QUESTIONS];
+        } else if (state.questionType === "pseudo") {
+          filtered = [...PSEUDOCODE_QUESTIONS];
+        } else {
+          filtered = [...COMBINED_QUESTIONS];
+        }
         if (state.selectedChapters.size > 0) {
           filtered = filtered.filter((q) =>
             state.selectedChapters.has(q.chapter),
