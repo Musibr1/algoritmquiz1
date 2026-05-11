@@ -702,13 +702,25 @@
         <div class="setup-section">
           <h3>📝 Frågetyp</h3>
           <div class="diff-btns">
-            <button class="diff-btn selected" data-qtype="all" onclick="selectQuestionType(this)">
+            <button
+              class="diff-btn selected"
+              data-qtype="all"
+              onclick="selectQuestionType(this)"
+            >
               <span class="emoji">🎯</span> Alla
             </button>
-            <button class="diff-btn" data-qtype="regular" onclick="selectQuestionType(this)">
+            <button
+              class="diff-btn"
+              data-qtype="regular"
+              onclick="selectQuestionType(this)"
+            >
               <span class="emoji">📖</span> Vanliga
             </button>
-            <button class="diff-btn" data-qtype="pseudo" onclick="selectQuestionType(this)">
+            <button
+              class="diff-btn"
+              data-qtype="pseudo"
+              onclick="selectQuestionType(this)"
+            >
               <span class="emoji">💻</span> Pseudokod
             </button>
           </div>
@@ -731,11 +743,15 @@
         <div class="setup-section">
           <h3>⏱️ Timer per fråga</h3>
           <div class="diff-btns">
-            <button class="diff-btn" data-timer="0" onclick="selectTimer(this)">
+            <button
+              class="diff-btn selected"
+              data-timer="0"
+              onclick="selectTimer(this)"
+            >
               <span class="emoji">♾️</span> Ingen
             </button>
             <button
-              class="diff-btn selected"
+              class="diff-btn"
               data-timer="30"
               onclick="selectTimer(this)"
             >
@@ -882,8 +898,10 @@
 
       function selectQuestionType(btn) {
         state.questionType = btn.dataset.qtype;
-        document.querySelectorAll('[data-qtype]').forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected');
+        document
+          .querySelectorAll("[data-qtype]")
+          .forEach((b) => b.classList.remove("selected"));
+        btn.classList.add("selected");
         updateAvailableCount();
       }
 
@@ -991,11 +1009,11 @@
       }
 
       function shuffleOptions(q) {
-        const letters = q.options.map(o => o.letter);
+        const letters = q.options.map((o) => o.letter);
         const correctLetters = q.correct_answer.split(",");
         const correctTexts = q.options
-          .filter(o => correctLetters.includes(o.letter))
-          .map(o => o.text);
+          .filter((o) => correctLetters.includes(o.letter))
+          .map((o) => o.text);
 
         // Fisher-Yates shuffle
         const shuffled = [...q.options];
@@ -1012,8 +1030,8 @@
 
         // Update correct_answer based on new positions
         const newCorrect = q.options
-          .filter(o => correctTexts.includes(o.text))
-          .map(o => o.letter)
+          .filter((o) => correctTexts.includes(o.text))
+          .map((o) => o.letter)
           .sort()
           .join(",");
         q.correct_answer = newCorrect;
@@ -1379,5 +1397,9 @@
       // Init
       init();
     </script>
+
+    <div style="text-align:center; padding:24px 16px; color:#555; font-size:12px; border-top:1px solid var(--border); margin-top:20px;">
+      Frågorna är skapade som studiematerial och är inte kopplade till något förlag eller kursbok.
+    </div>
   </body>
 </html>
